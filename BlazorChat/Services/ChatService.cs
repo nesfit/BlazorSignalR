@@ -23,9 +23,9 @@ namespace BlazorChat.Services
             await _hubConnection.StartAsync();
         }
         
-        public async Task SendAsync(string message)
+        public async Task SendAsync(string message, string userName = null)
         {
-            await _hubConnection.SendAsync(BlazorChatSampleHub.BroadcastMethodName, _userName, message);
+            await _hubConnection.SendAsync(BlazorChatSampleHub.BroadcastMethodName, userName ?? _userName, message);
         }
 
         public async Task DisconnectAsync()

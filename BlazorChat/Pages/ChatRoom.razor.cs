@@ -25,6 +25,7 @@ namespace BlazorChat.Pages
         protected List<MessageModel> Messages = new List<MessageModel>();
 
         private ChatService _chatService;
+        private BotService _botService;
 
         [Inject]
         protected NavigationManager NavigationManager { get; set; }
@@ -39,7 +40,7 @@ namespace BlazorChat.Pages
             };
 
             _chatService = new ChatService();
-
+            _botService = new BotService(_chatService, $"{Username}Bot");
             try
             {
                 // Start chatting and force refresh UI.
@@ -59,11 +60,13 @@ namespace BlazorChat.Pages
             }
         }
 
-        protected void HandleNewMessage(string name, string message)
+        protected void HandleNewMessage(string senderName, string message)
         {
-            bool isMine = name.Equals(Username, StringComparison.OrdinalIgnoreCase);
+            bool isMine = senderName.Equals(Username, StringComparison.OrdinalIgnoreCase);
 
-            Messages.Add(new MessageModel(name, message, isMine));
+            Messages.Add(new MessageModel(senderName, message, isMine));
+
+            _botService.HandleMessageAsync(senderName, message).ConfigureAwait(false);
 
             // Inform blazor the UI needs updating
             StateHasChanged();
