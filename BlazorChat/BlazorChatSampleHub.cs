@@ -7,10 +7,12 @@ namespace BlazorChat
     public class BlazorChatSampleHub : Hub
     {
         public const string HubUrl = "/chat";
+        public const string BroadcastMethodName = "Broadcast";
+
 
         public async Task Broadcast(string username, string message)
         {
-            await Clients.All.SendAsync("Broadcast", username, message);
+            await Clients.All.SendAsync(BroadcastMethodName, username, message);
         }
 
         public override Task OnConnectedAsync()
