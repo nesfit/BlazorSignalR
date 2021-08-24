@@ -8,6 +8,8 @@ namespace BlazorChat.Services
         private readonly ChatService _chatService;
         private readonly string _botName;
 
+        private static readonly Random Random = new Random(DateTime.Now.Millisecond);
+
         public BotService(ChatService chatService, string botName)
         {
             _chatService = chatService;
@@ -18,21 +20,15 @@ namespace BlazorChat.Services
         {
             if(senderName.Equals(_botName)) return;
 
-            if (message.Contains("Joke", StringComparison.CurrentCultureIgnoreCase))
+            if (message.Contains("Ping", StringComparison.CurrentCultureIgnoreCase))
             {
-                Random random = new Random(DateTime.Now.Millisecond);
-                await _chatService.SendAsync(Jokes[random.Next(Jokes.Length)], _botName);
+                await _chatService.SendAsync(PingReply[Random.Next(PingReply.Length)], _botName);
             }
         }
 
-        private static readonly string[] Jokes =
+        private static readonly string[] PingReply =
         {
-            @"Algorithm... Word used by programmers when they don't want to explain what they did.",
-            @"""Knock, knock."" ... ""Who’s there?"" ... very long pause... ""Java.""",
-            @"Its not a bug, its a feature.",
-            @"Q: how many programmers does it take to change a light bulb? ... A: none, that's a hardware problem",
-            @"Q: ""Whats the object-oriented way to become wealthy?"" ...  A: Inheritance",
-            @" [""hip"",""hip""] ... (hip hip array!)"
+            @"Pong",
         };
     }
 }
